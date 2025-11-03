@@ -10,23 +10,27 @@ phases:
   install:
     runtime-versions:
       java: corretto17
-      docker: 20
+      docker: 19
     commands:
       - echo Installing dependencies
       - cd demo
       - mvn clean package -DskipTests
+
   pre_build:
     commands:
       - echo Logging in to Amazon ECR...
       - aws ecr get-login-password --region $AWS_DEFAULT_REGION | docker login --username AWS --password-stdin $ECR_REPO
+
   build:
     commands:
       - echo Building Docker image...
-      - docker build -t $ECR_REPO:$IMAGE_TAG ./demo
+      - docker build -t $ECR_REPO:$IMAGE_TAG .
+
   post_build:
     commands:
       - echo Pushing Docker image to ECR...
       - docker push $ECR_REPO:$IMAGE_TAG
       - echo Build completed successfully!
+
 artifacts:
-  files: demo/target/*.jar
+  files: [] # ✅ empty array fixes “Incorrect type. Expected array”
