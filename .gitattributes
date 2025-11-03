@@ -1,0 +1,10 @@
+# Auto normalize line endings
+* text=auto
+
+# Force LF for shell scripts and configs
+*.sh text eol=lf
+*.yml text eol=lf
+*.yaml text eol=lf
+*.xml text eol=lf
+*.java text eol=lf
+*.properties text eol=lf
