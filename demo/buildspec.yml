@@ -24,8 +24,9 @@ phases:
 
   build:
     commands:
-      - echo Building Docker image...
-      - docker build -t $ECR_REPO:$IMAGE_TAG ./demo
+      - echo Building Docker image for ECS (amd64 platform)...
+      - docker buildx create --use
+      - docker buildx build --platform linux/amd64 -t $ECR_REPO:$IMAGE_TAG ./demo
 
   post_build:
     commands:
