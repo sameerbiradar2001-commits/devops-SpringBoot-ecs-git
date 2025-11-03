@@ -16,6 +16,6 @@ public class Hi {
 
     @GetMapping
     public String hi(){
-        return "Hi from Sameer — running in " + activeProfile + " (" + envMessage + ")";
+        return "Hi from Sameer — running in " + activeProfile + " (" + envMessage + ") "+"/n\n next ci-cd";
     }
 }
