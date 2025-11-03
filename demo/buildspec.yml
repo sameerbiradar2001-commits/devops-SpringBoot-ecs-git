@@ -12,9 +12,10 @@ phases:
       java: corretto17
       docker: 19
     commands:
-      - echo Installing dependencies
+      - echo Installing dependencies...
       - cd demo
       - mvn clean package -DskipTests
+      - cd ..
 
   pre_build:
     commands:
@@ -24,13 +25,17 @@ phases:
   build:
     commands:
       - echo Building Docker image...
-      - docker build -t $ECR_REPO:$IMAGE_TAG .
+      - docker build -t $ECR_REPO:$IMAGE_TAG ./demo
 
   post_build:
     commands:
       - echo Pushing Docker image to ECR...
       - docker push $ECR_REPO:$IMAGE_TAG
+      - echo Creating imagedefinitions.json for ECS deployment...
+      - printf '[{"name":"sam-dev","imageUri":"%s"}]' $ECR_REPO:$IMAGE_TAG > imagedefinitions.json
+      - cat imagedefinitions.json
       - echo Build completed successfully!
 
 artifacts:
-  files: [] # ✅ empty array fixes “Incorrect type. Expected array”
+  files:
+    - imagedefinitions.json
